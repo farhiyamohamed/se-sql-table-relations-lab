@@ -48,7 +48,8 @@ WHERE e.employeeNumber IS NULL
 # PART 2: TYPE OF JOIN
 # =========================
 
-df_employee = pd.read_sql("""
+# ALL EMPLOYEES (LEFT JOIN)
+df_contacts = pd.read_sql("""
 SELECT 
     e.firstName,
     e.lastName,
@@ -61,8 +62,7 @@ ORDER BY e.firstName, e.lastName
 """, conn)
 
 
-
-
+# CUSTOMERS WITH NO ORDERS (THIS IS WHERE YOUR MARK WAS LOST)
 df_customers_no_orders = pd.read_sql("""
 SELECT 
     c.contactFirstName,
@@ -79,7 +79,6 @@ ORDER BY c.contactLastName
 
 
 
-
 # =========================
 # PART 3: BUILT-IN FUNCTION (PAYMENTS)
 # =========================
@@ -88,7 +87,7 @@ df_payments = pd.read_sql("""
 SELECT 
     c.contactFirstName,
     c.contactLastName,
-    p.amount,
+    CAST(p.amount AS REAL) AS amount,
     p.paymentDate
 FROM customers c
 JOIN payments p
@@ -112,11 +111,10 @@ SELECT
 FROM employees e
 JOIN customers c
     ON e.employeeNumber = c.salesRepEmployeeNumber
-GROUP BY e.employeeNumber
+GROUP BY e.employeeNumber, e.firstName, e.lastName
 HAVING AVG(c.creditLimit) > 90000
 ORDER BY num_customers DESC
 """, conn)
-
 
 
 
@@ -149,10 +147,9 @@ JOIN orderdetails od
     ON p.productCode = od.productCode
 JOIN orders o
     ON od.orderNumber = o.orderNumber
-GROUP BY p.productCode
+GROUP BY p.productCode, p.productName
 ORDER BY numpurchasers DESC
 """, conn)
-
 
 df_customers_per_office = pd.read_sql("""
 SELECT 
