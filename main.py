@@ -31,11 +31,10 @@ WHERE e.employeeNumber IS NULL
 
 
 # =========================
-# =========================
 # PART 2: TYPE OF JOIN
 # =========================
 
-df_contacts = pd.read_sql("""
+df_employee = pd.read_sql("""
 SELECT 
     e.firstName,
     e.lastName,
@@ -59,7 +58,6 @@ LEFT JOIN orders o
     ON c.customerNumber = o.customerNumber
 WHERE o.orderNumber IS NULL
 """, conn)
-
 
 # =========================
 # PART 3: BUILT-IN FUNCTION
