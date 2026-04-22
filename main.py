@@ -15,8 +15,7 @@ print(pd.read_sql("SELECT name FROM sqlite_master WHERE type='table'", conn))
 df_boston = pd.read_sql("""
 SELECT 
     e.firstName,
-    e.lastName,
-    e.jobTitle
+    e.lastName
 FROM employees e
 JOIN offices o
     ON e.officeCode = o.officeCode
