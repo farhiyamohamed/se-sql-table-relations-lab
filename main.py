@@ -34,18 +34,18 @@ WHERE e.employeeNumber IS NULL
 # PART 2: TYPE OF JOIN
 # =========================
 
-df_employee = pd.read_sql("""
+df_no_orders = pd.read_sql("""
 SELECT 
-    e.firstName,
-    e.lastName,
-    o.city,
-    o.state
-FROM employees e
-LEFT JOIN offices o
-    ON e.officeCode = o.officeCode
-ORDER BY e.firstName, e.lastName
+    c.contactFirstName,
+    c.contactLastName,
+    c.phone,
+    c.salesRepEmployeeNumber
+FROM customers c
+WHERE c.customerNumber NOT IN (
+    SELECT DISTINCT customerNumber
+    FROM orders
+)
 """, conn)
-
 
 df_no_orders = pd.read_sql("""
 SELECT 
