@@ -31,6 +31,7 @@ WHERE e.employeeNumber IS NULL
 
 
 # =========================
+# =========================
 # PART 2: TYPE OF JOIN
 # =========================
 
@@ -47,7 +48,7 @@ ORDER BY e.firstName, e.lastName
 """, conn)
 
 
-df_customers_no_orders = pd.read_sql("""
+df_no_orders = pd.read_sql("""
 SELECT 
     c.contactFirstName,
     c.contactLastName,
@@ -57,7 +58,6 @@ FROM customers c
 LEFT JOIN orders o
     ON c.customerNumber = o.customerNumber
 WHERE o.orderNumber IS NULL
-ORDER BY c.contactLastName
 """, conn)
 
 
