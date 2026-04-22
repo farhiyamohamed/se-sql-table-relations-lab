@@ -34,9 +34,18 @@ WHERE e.employeeNumber IS NULL
 # PART 2: TYPE OF JOIN
 # =========================
 
-# =========================
-# PART 2: TYPE OF JOIN
-# =========================
+df_employee = pd.read_sql("""
+SELECT 
+    e.firstName,
+    e.lastName,
+    o.city,
+    o.state
+FROM employees e
+LEFT JOIN offices o
+    ON e.officeCode = o.officeCode
+ORDER BY e.firstName, e.lastName
+""", conn)
+
 
 df_no_orders = pd.read_sql("""
 SELECT 
@@ -47,10 +56,8 @@ SELECT
 FROM customers c
 LEFT JOIN orders o
     ON c.customerNumber = o.customerNumber
-GROUP BY c.customerNumber
-HAVING COUNT(o.orderNumber) = 0
+WHERE o.orderNumber IS NULL
 """, conn)
-
 # =========================
 # PART 3: BUILT-IN FUNCTION
 # =========================
