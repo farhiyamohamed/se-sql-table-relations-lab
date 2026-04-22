@@ -34,7 +34,11 @@ WHERE e.employeeNumber IS NULL
 # PART 2: TYPE OF JOIN
 # =========================
 
-df_contacts = pd.read_sql("""
+# =========================
+# PART 2: TYPE OF JOIN
+# =========================
+
+df_employee = pd.read_sql("""
 SELECT 
     e.firstName,
     e.lastName,
