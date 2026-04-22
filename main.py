@@ -1,11 +1,7 @@
 import sqlite3
 import pandas as pd
 
-# Connect to database
 conn = sqlite3.connect('data.sqlite')
-
-print(pd.read_sql("SELECT name FROM sqlite_master WHERE type='table'", conn))
-
 
 # =========================
 # PART 1: JOIN AND FILTER
@@ -34,21 +30,10 @@ WHERE e.employeeNumber IS NULL
 """, conn)
 
 
-
-
-
-
-
-
-
-
-
-
 # =========================
 # PART 2: TYPE OF JOIN
 # =========================
 
-# ALL EMPLOYEES (LEFT JOIN)
 df_contacts = pd.read_sql("""
 SELECT 
     e.firstName,
@@ -62,7 +47,6 @@ ORDER BY e.firstName, e.lastName
 """, conn)
 
 
-# CUSTOMERS WITH NO ORDERS (THIS IS WHERE YOUR MARK WAS LOST)
 df_customers_no_orders = pd.read_sql("""
 SELECT 
     c.contactFirstName,
@@ -77,10 +61,8 @@ ORDER BY c.contactLastName
 """, conn)
 
 
-
-
 # =========================
-# PART 3: BUILT-IN FUNCTION (PAYMENTS)
+# PART 3: BUILT-IN FUNCTION
 # =========================
 
 df_payments = pd.read_sql("""
@@ -94,8 +76,6 @@ JOIN payments p
     ON c.customerNumber = p.customerNumber
 ORDER BY CAST(p.amount AS REAL) DESC
 """, conn)
-
-
 
 
 # =========================
@@ -117,7 +97,6 @@ ORDER BY num_customers DESC
 """, conn)
 
 
-
 df_top_products = pd.read_sql("""
 SELECT 
     p.productName,
@@ -126,11 +105,9 @@ SELECT
 FROM products p
 JOIN orderdetails od
     ON p.productCode = od.productCode
-GROUP BY p.productCode
+GROUP BY p.productCode, p.productName
 ORDER BY totalunits DESC
 """, conn)
-
-
 
 
 # =========================
@@ -151,6 +128,7 @@ GROUP BY p.productCode, p.productName
 ORDER BY numpurchasers DESC
 """, conn)
 
+
 df_customers_per_office = pd.read_sql("""
 SELECT 
     o.officeCode,
@@ -161,7 +139,7 @@ JOIN employees e
     ON o.officeCode = e.officeCode
 JOIN customers c
     ON e.employeeNumber = c.salesRepEmployeeNumber
-GROUP BY o.officeCode
+GROUP BY o.officeCode, o.city
 ORDER BY n_customers DESC
 """, conn)
 
@@ -201,7 +179,4 @@ JOIN low_products lp
 """, conn)
 
 
-
-
-# Close connection
 conn.close()
