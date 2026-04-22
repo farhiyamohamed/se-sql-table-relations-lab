@@ -12,6 +12,8 @@ print(pd.read_sql("SELECT name FROM sqlite_master WHERE type='table'", conn))
 # =========================
 
 # MUST be named df_boston (required by grader)
+# PART 1
+
 df_boston = pd.read_sql("""
 SELECT 
     e.firstName,
@@ -20,6 +22,18 @@ FROM employees e
 JOIN offices o
     ON e.officeCode = o.officeCode
 WHERE o.city = 'Boston'
+""", conn)
+
+
+df_zero_emp = pd.read_sql("""
+SELECT 
+    o.officeCode,
+    o.city,
+    o.state
+FROM offices o
+LEFT JOIN employees e
+    ON o.officeCode = e.officeCode
+WHERE e.employeeNumber IS NULL
 """, conn)
 
 print("\nBOSTON EMPLOYEES:\n", df_boston)
